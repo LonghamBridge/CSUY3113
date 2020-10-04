@@ -1,0 +1,2 @@
+E:\CSUY3113\Project2\Debug\SDLProject.exe
+E:\CSUY3113\Project2\Debug\SDLProject.pdb
