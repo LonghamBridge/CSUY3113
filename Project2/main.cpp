@@ -116,6 +116,7 @@ void ProcessInput() {
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     if (keys[SDL_SCANCODE_SPACE] && !gameStarted) {
         ballMovement = glm::vec3(3.0f, -3.0f, 0);
+        gameStarted = true;
     }
     if (keys[SDL_SCANCODE_K] && !someoneWon) {
         if (paddle1Position.y < 3.7)
@@ -155,8 +156,10 @@ void Update() {
 
     /*------Collision Check------*/
     //Top & Bottom Wall Check
-    if (ballPosition.y >= 4.3f || ballPosition.y <= -4.3f)
-        ballMovement.y = -ballMovement.y;
+    if (ballPosition.y >= 4.3f)
+        ballMovement.y = -3.0;
+    else if (ballPosition.y <= -4.3f)
+        ballMovement.y = 3.0f;
     //isCollided(glm::vec3 position1, float height1, float width1, glm::vec3 position2, float height2, float width2)
     else if (isCollided(ballPosition, ballHeight, ballWidth, paddle1Position, paddle1Height, paddle1Width))
         ballMovement.x = -3.0f;
