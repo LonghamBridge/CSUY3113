@@ -18,6 +18,8 @@ SDL_Window* displayWindow;
 ShaderProgram program;
 glm::mat4 viewMatrix, projectionMatrix;
 bool gameIsRunning = true;
+bool gameStarted = false;
+bool someoneWon = false;
 float lastTicks = 0.0f;
 
 /*------Paddle1 Field------*/
@@ -41,7 +43,7 @@ float paddle2Width = 0.4f;
 /*------Ball Field------*/
 glm::mat4 ballMatrix = glm::mat4(1.0f);
 glm::vec3 ballPosition = glm::vec3(0, 0, 0);
-glm::vec3 ballMovement;
+glm::vec3 ballMovement = glm::vec3(0.0f, 0.0f, 0);
 GLuint ballTextureID;
 float ballSpeed = 1.0f;
 float ballHeight = 0.4f;
@@ -64,9 +66,13 @@ GLuint LoadTexture(const char* filePath) {
     return textureID;
 }
 
+bool isCollided(glm::vec3 position1, float height1, float width1, glm::vec3 position2, float height2, float width2) {
+    return (fabs(position1.x - position2.x) - ((width1 + width2) / 2.0f) < 0) && (fabs(position1.y - position2.y) - ((height1 + height2) / 2.0f) < 0);
+}
+
 void Initialize() {
     SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("HW02", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, SDL_WINDOW_OPENGL);
+    displayWindow = SDL_CreateWindow("HW02: Press Space to Start, D, C, K, M to Play!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 
@@ -108,26 +114,26 @@ void ProcessInput() {
     }
 
     const Uint8* keys = SDL_GetKeyboardState(NULL);
-    if (keys[SDL_SCANCODE_K]) {
+    if (keys[SDL_SCANCODE_SPACE] && !gameStarted) {
+        ballMovement = glm::vec3(3.0f, -3.0f, 0);
+    }
+    if (keys[SDL_SCANCODE_K] && !someoneWon) {
         if (paddle1Position.y < 3.7)
             paddle1Movement.y = 10.0f;
     }
-    else if (keys[SDL_SCANCODE_M]) {
+    else if (keys[SDL_SCANCODE_M] && !someoneWon) {
         if (paddle1Position.y > -3.7)
             paddle1Movement.y = -10.0f;
     }
 
-    if (keys[SDL_SCANCODE_D]) {
+    if (keys[SDL_SCANCODE_D] && !someoneWon) {
         if (paddle2Position.y < 3.7)
             paddle2Movement.y = 10.0f;
     }
-    else if (keys[SDL_SCANCODE_C]) {
+    else if (keys[SDL_SCANCODE_C] && !someoneWon) {
         if (paddle2Position.y > -3.7)
             paddle2Movement.y = -10.0f;
     }
-
-    
-
 }
 
 void Update() {
@@ -143,38 +149,78 @@ void Update() {
     paddle1Matrix = glm::translate(paddle1Matrix, paddle1Position);
 
     //Paddle2
-    paddle2Position += paddle1Movement * paddle1Speed * deltaTime;
+    paddle2Position += paddle2Movement * paddle2Speed * deltaTime;
     paddle2Matrix = glm::mat4(1.0f);
-    paddle2Matrix = glm::translate(paddle1Matrix, paddle1Position);
+    paddle2Matrix = glm::translate(paddle2Matrix, paddle2Position);
+
+    /*------Collision Check------*/
+    //Top & Bottom Wall Check
+    if (ballPosition.y >= 4.3f || ballPosition.y <= -4.3f)
+        ballMovement.y = -ballMovement.y;
+    //isCollided(glm::vec3 position1, float height1, float width1, glm::vec3 position2, float height2, float width2)
+    else if (isCollided(ballPosition, ballHeight, ballWidth, paddle1Position, paddle1Height, paddle1Width))
+        ballMovement.x = -3.0f;
+    else if (isCollided(ballPosition, ballHeight, ballWidth, paddle2Position, paddle2Height, paddle2Width))
+        ballMovement.x = 3.0f;
+    else if (ballPosition.x >= 7.8f || ballPosition.x <= -7.8f) {
+        someoneWon = true;
+        ballMovement = glm::vec3(0);
+    }
+
+    //Ball
+    ballSpeed += 0.1f * deltaTime; //EXTRA: Makes the game challenging!
+    ballPosition += ballMovement * ballSpeed * deltaTime;
+    ballMatrix = glm::mat4(1.0f);
+    ballMatrix = glm::translate(ballMatrix, ballPosition);
+
+    //Trace
 
 }
 
 
 void Render() {
-    float paddle1[] = { -0.2, -0.8, 0.2, -0.8, 0.2, 0.8, -0.2, -0.8, 0.2, 0.8, -0.2, 0.8 };
-    float paddle2[] = { -0.2, -0.8, 0.2, -0.8, 0.2, 0.8, -0.2, -0.8, 0.2, 0.8, -0.2, 0.8 };
+    float paddle[] = { -0.2, -0.8, 0.2, -0.8, 0.2, 0.8, -0.2, -0.8, 0.2, 0.8, -0.2, 0.8 };
     float ball[] = { -0.2, -0.2, 0.2, -0.2, 0.2, 0.2, -0.2, -0.2, 0.2, 0.2, -0.2, 0.2 };
-
+    //EXTRA: Show the ball's trace
+    float traceTL[] = { 0.0, 0.2, -0.4, 0.6, -0.2, 0.2, -0.2, 0.2, -0.6, 0.4, -0.2, 0.0 };
+    float traceBL[] = { -0.2, 0.0, -0.2, -0.2, -0.6, -0.4, -0.2, -0.2, -0.4, -0.6, 0.0, -0.2 };
+    float traceBR[] = { 0.0, -0.2, 0.4, -0.6, 0.2, -0.2, 0.2, -0.2, 0.6, -0.4, 0.2, 0.0 };
+    float traceTR[] = { 0.2, 0.0, 0.2, 0.2, 0.6, 0.4, 0.2, 0.2, 0.4, 0.6, 0.0, 0.2 };
+ 
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, paddle1);
+    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, paddle);
     glEnableVertexAttribArray(program.positionAttribute);
 
-
-    /*-------DRAW PLAYER-------*/
+    /*-------DRAW OBJECTS-------*/
     program.SetModelMatrix(paddle1Matrix);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     program.SetModelMatrix(paddle2Matrix);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
+    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, ball);
+    program.SetModelMatrix(ballMatrix);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    if (ballMovement.x > 0 && ballMovement.y < 0)
+        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, traceTL);
+    else if (ballMovement.x > 0 && ballMovement.y > 0)
+        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, traceBL);
+    else if (ballMovement.x < 0 && ballMovement.y > 0)
+        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, traceBR);
+    else if (ballMovement.x < 0 && ballMovement.y < 0)
+        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, traceTR);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
     glDisableVertexAttribArray(program.positionAttribute);
 
+    //EXTRA: Make the scene gray when game finishes
+    if (someoneWon)
+        program.SetColor(0.4f, 0.4f, 0.4f, 1.0f);
+
     SDL_GL_SwapWindow(displayWindow);
-
-
-
 }
 
 void Shutdown() {
