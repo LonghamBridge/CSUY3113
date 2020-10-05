@@ -168,7 +168,8 @@ void Update() {
     }
 
     //Ball
-    ballSpeed += 0.1f * deltaTime; //EXTRA: Makes the game challenging!
+    if (gameStarted)
+        ballSpeed += 0.1f * deltaTime; //EXTRA: Makes the game challenging!
     ballPosition += ballMovement * ballSpeed * deltaTime;
     ballMatrix = glm::mat4(1.0f);
     ballMatrix = glm::translate(ballMatrix, ballPosition);

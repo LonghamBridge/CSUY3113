@@ -1,9 +1,9 @@
 ﻿  main.cpp
 E:\CSUY3113\Project2\main.cpp(112,18): warning C4060: switch statement contains no 'case' or 'default' labels
-E:\CSUY3113\Project2\main.cpp(182,89): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\CSUY3113\Project2\main.cpp(183,87): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\CSUY3113\Project2\main.cpp(185,89): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\CSUY3113\Project2\main.cpp(186,94): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\CSUY3113\Project2\main.cpp(187,89): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\CSUY3113\Project2\main.cpp(188,84): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\CSUY3113\Project2\main.cpp(183,89): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\CSUY3113\Project2\main.cpp(184,87): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\CSUY3113\Project2\main.cpp(186,89): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\CSUY3113\Project2\main.cpp(187,94): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\CSUY3113\Project2\main.cpp(188,89): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\CSUY3113\Project2\main.cpp(189,84): warning C4305: 'initializing': truncation from 'double' to 'float'
   SDLProject.vcxproj -> E:\CSUY3113\Project2\Debug\SDLProject.exe
