@@ -18,7 +18,7 @@
 #include "Entity.h"
 
 #define FIXED_TIMESTEP 0.007f
-#define PLATFORM_COUNT 43
+#define PLATFORM_COUNT 45
 
 
 struct GameState {
@@ -29,6 +29,8 @@ struct GameState {
     Entity* explosion1;
     Entity* explosion2;
 };
+
+
 
 GameState state;
 SDL_Window* displayWindow;
@@ -163,6 +165,7 @@ void Initialize() {
     state.player->textureID = LoadTexture("player.png");
     state.player->height = 1;
     state.player->width = 0.8;
+    state.player->entityType = PLAYER;
 
 
     /*------platforms field------*/
@@ -174,15 +177,19 @@ void Initialize() {
 
     state.platforms[0].textureID = platformTextureID1;
     state.platforms[0].position = glm::vec3(2.5, -4, 0);
+    state.platforms[0].entityType = GOAL;
 
     state.platforms[1].textureID = platformTextureID1;
     state.platforms[1].position = glm::vec3(3.5, -4, 0);
+    state.platforms[1].entityType = GOAL;
 
     state.platforms[2].textureID = platformTextureID1;
     state.platforms[2].position = glm::vec3(4.5, -4, 0);
+    state.platforms[2].entityType = GOAL;
 
     state.platforms[3].textureID = platformTextureID3;
     state.platforms[3].position = glm::vec3(-7.5, -4, 0);
+    state.platforms[3].entityType = WALL;
 
     state.platforms[4].textureID = platformTextureID2;
     state.platforms[4].position = glm::vec3(-6.5, -4, 0);
@@ -219,89 +226,123 @@ void Initialize() {
 
     state.platforms[15].textureID = platformTextureID3;
     state.platforms[15].position = glm::vec3(7.5, -4, 0);
+    state.platforms[15].entityType = WALL;
 
     state.platforms[16].textureID = platformTextureID3;
     state.platforms[16].position = glm::vec3(7.5, -3, 0);
+    state.platforms[16].entityType = WALL;
 
     state.platforms[17].textureID = platformTextureID3;
     state.platforms[17].position = glm::vec3(7.5, -2, 0);
+    state.platforms[17].entityType = WALL;
 
     state.platforms[18].textureID = platformTextureID3;
     state.platforms[18].position = glm::vec3(7.5, -1, 0);
+    state.platforms[18].entityType = WALL;
 
     state.platforms[19].textureID = platformTextureID3;
     state.platforms[19].position = glm::vec3(7.5, 0, 0);
+    state.platforms[19].entityType = WALL;
 
     state.platforms[20].textureID = platformTextureID3;
     state.platforms[20].position = glm::vec3(7.5, 1, 0);
+    state.platforms[20].entityType = WALL;
 
     state.platforms[21].textureID = platformTextureID3;
     state.platforms[21].position = glm::vec3(7.5, 2, 0);
+    state.platforms[21].entityType = WALL;
 
     state.platforms[22].textureID = platformTextureID3;
     state.platforms[22].position = glm::vec3(7.5, 3, 0);
+    state.platforms[22].entityType = WALL;
 
     state.platforms[23].textureID = platformTextureID3;
     state.platforms[23].position = glm::vec3(7.5, 4, 0);
+    state.platforms[23].entityType = WALL;
 
     state.platforms[24].textureID = platformTextureID3;
     state.platforms[24].position = glm::vec3(-7.5, -3, 0);
+    state.platforms[24].entityType = WALL;
 
     state.platforms[25].textureID = platformTextureID3;
     state.platforms[25].position = glm::vec3(-7.5, -2, 0);
+    state.platforms[25].entityType = WALL;
 
     state.platforms[26].textureID = platformTextureID3;
     state.platforms[26].position = glm::vec3(-7.5, -1, 0);
+    state.platforms[26].entityType = WALL;
 
     state.platforms[27].textureID = platformTextureID3;
     state.platforms[27].position = glm::vec3(-7.5, 0, 0);
+    state.platforms[27].entityType = WALL;
 
     state.platforms[28].textureID = platformTextureID3;
     state.platforms[28].position = glm::vec3(-7.5, 1, 0);
+    state.platforms[28].entityType = WALL;
 
     state.platforms[29].textureID = platformTextureID3;
     state.platforms[29].position = glm::vec3(-7.5, 2, 0);
+    state.platforms[29].entityType = WALL;
 
     state.platforms[30].textureID = platformTextureID3;
     state.platforms[30].position = glm::vec3(-7.5, 3, 0);
+    state.platforms[30].entityType = WALL;
 
     state.platforms[31].textureID = platformTextureID3;
     state.platforms[31].position = glm::vec3(-7.5, 4, 0);
+    state.platforms[31].entityType = WALL;
 
     state.platforms[32].textureID = platformTextureID4;
     state.platforms[32].position = glm::vec3(-6.5, -3.5, 0);
+    state.platforms[32].entityType = MINE;
 
     state.platforms[33].textureID = platformTextureID4;
     state.platforms[33].position = glm::vec3(-5.5, -3.5, 0);
+    state.platforms[33].entityType = MINE;
 
     state.platforms[34].textureID = platformTextureID4;
     state.platforms[34].position = glm::vec3(-4.5, -3.5, 0);
+    state.platforms[34].entityType = MINE;
 
     state.platforms[35].textureID = platformTextureID4;
     state.platforms[35].position = glm::vec3(-3.5, -3.5, 0);
+    state.platforms[35].entityType = MINE;
 
     state.platforms[36].textureID = platformTextureID4;
     state.platforms[36].position = glm::vec3(-2.5, -3.5, 0);
+    state.platforms[36].entityType = MINE;
 
     state.platforms[37].textureID = platformTextureID4;
     state.platforms[37].position = glm::vec3(-1.5, -3.5, 0);
+    state.platforms[37].entityType = MINE;
 
     state.platforms[38].textureID = platformTextureID4;
     state.platforms[38].position = glm::vec3(-0.5, -3.5, 0);
+    state.platforms[38].entityType = MINE;
 
     state.platforms[39].textureID = platformTextureID4;
     state.platforms[39].position = glm::vec3(0.5, -3.5, 0);
+    state.platforms[39].entityType = MINE;
 
     state.platforms[40].textureID = platformTextureID4;
     state.platforms[40].position = glm::vec3(1.5, -3.5, 0);
+    state.platforms[40].entityType = MINE;
 
     state.platforms[41].textureID = platformTextureID4;
     state.platforms[41].position = glm::vec3(5.5, -3.5, 0);
+    state.platforms[41].entityType = MINE;
 
     state.platforms[42].textureID = platformTextureID4;
     state.platforms[42].position = glm::vec3(6.5, -3.5, 0);
+    state.platforms[42].entityType = MINE;
 
+    state.platforms[43].textureID = platformTextureID3;
+    state.platforms[43].position = glm::vec3(3, -0.5, 0);
+    state.platforms[43].entityType = WALL;
 
+    state.platforms[44].textureID = platformTextureID3;
+    state.platforms[44].position = glm::vec3(2, -0.5, 0);
+    state.platforms[44].entityType = WALL;
 
     for (int i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Update(0, NULL, 0);
@@ -377,11 +418,9 @@ void Update() {
             state.explosion1->isActive = false;
             state.player->isActive = true;
             state.player->Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
-            if (state.player->collidedLeft || state.player->collidedRight) stage = 4;
-            if (state.player->collidedBottom) {
-                if (state.player->position.x > 2.5 && state.player->position.x < 4.5) stage = 5;
-                else stage = 3;
-            }
+            if (state.player->lastCollision == WALL) stage = 4;
+            else if (state.player->lastCollision == GOAL) stage = 5;
+            else if (state.player->lastCollision == MINE) stage = 3;
             break;
         case 3:
             state.player->isActive = false;
@@ -403,9 +442,9 @@ void Update() {
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (stage == 3 || stage == 4) DrawText(&program, LoadTexture("font1.png"), "YOU DIED", 1.25, -0.25, glm::vec3(-3.25, 0, 0));
+    if (stage == 3 || stage == 4) DrawText(&program, LoadTexture("font1.png"), "YOU DIED", 1.25, -0.25, glm::vec3(-3.25, 1, 0));
 
-    if (stage == 5) DrawText(&program, LoadTexture("font1.png"), "YOU SURVIVED", 1.25, -0.25, glm::vec3(-5, 0, 0));
+    if (stage == 5) DrawText(&program, LoadTexture("font1.png"), "YOU SURVIVED", 1.25, -0.25, glm::vec3(-5.5, 1, 0));
 
     for (int i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Render(&program);

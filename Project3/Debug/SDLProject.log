@@ -1,7 +1,7 @@
 ﻿  main.cpp
-E:\CSUY3113\Project3\main.cpp(68,23): warning C4018: '<': signed/unsigned mismatch
-E:\CSUY3113\Project3\main.cpp(165,30): warning C4305: '=': truncation from 'double' to 'float'
-E:\CSUY3113\Project3\main.cpp(389,48): warning C4305: '-=': truncation from 'double' to 'T'
+E:\CSUY3113\Project3\main.cpp(70,23): warning C4018: '<': signed/unsigned mismatch
+E:\CSUY3113\Project3\main.cpp(167,30): warning C4305: '=': truncation from 'double' to 'float'
+E:\CSUY3113\Project3\main.cpp(428,48): warning C4305: '-=': truncation from 'double' to 'T'
           with
           [
               T=float

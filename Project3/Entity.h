@@ -11,8 +11,13 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+enum EntityType { PLAYER, WALL, MINE, GOAL, DEFAULT };
+
 class Entity {
 public:
+	EntityType entityType = DEFAULT;
+	EntityType lastCollision = DEFAULT;
+
 	glm::mat4 modelMatrix;
 	glm::vec3 position;
 	glm::vec3 movement;

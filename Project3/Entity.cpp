@@ -20,7 +20,12 @@ Entity::Entity(glm::vec3 p, glm::vec3 d, float m) {
 }
 
 bool Entity::CheckCollision(Entity* other) {
-	return isActive && other->isActive && (fabs(position.x - other->position.x) - ((width + other->width) / 2.0f) < 0) && (fabs(position.y - other->position.y) - ((height + other->height) / 2.0f) < 0);
+	bool b = isActive && other->isActive && (fabs(position.x - other->position.x) - ((width + other->width) / 2.0f) < 0) && (fabs(position.y - other->position.y) - ((height + other->height) / 2.0f) < 0);
+	if (b) {
+		lastCollision = other->entityType;
+		return true;
+	}
+	return false;
 }
 
 void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
