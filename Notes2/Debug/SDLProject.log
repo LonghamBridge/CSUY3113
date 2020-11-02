@@ -1,3 +1,7 @@
-﻿  main.cpp
-E:\CSUY3113\Notes2\main.cpp(60,23): warning C4018: '<': signed/unsigned mismatch
+﻿  Entity.cpp
+E:\CSUY3113\Notes2\Entity.cpp(103,37): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   SDLProject.vcxproj -> E:\CSUY3113\Notes2\Debug\SDLProject.exe

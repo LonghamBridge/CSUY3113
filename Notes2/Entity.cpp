@@ -10,13 +10,13 @@ Entity::Entity() {
 	speed = 0;
 }
 
-Entity::Entity(glm::vec3 p, glm::vec3 d, float m) {
+Entity::Entity(glm::vec3 p, glm::vec3 m, float v) {
 	modelMatrix = glm::mat4(1.0f);
 	position = p;
-	movement = d;
-	velocity = m * d;
+	movement = m;
+	velocity = v * m;
 	acceleration = glm::vec3(0);
-	speed = m;
+	speed = v;
 }
 
 bool Entity::CheckCollision(Entity* other) {
@@ -89,7 +89,36 @@ void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID
 	glDisableVertexAttribArray(program->texCoordAttribute);
 }
 
-void Entity::Update(float deltaTime, Entity* platforms, int platformCount) {
+void Entity::AIWalker() {
+	movement = glm::vec3(-1, 0, 0);
+}
+
+void Entity::AIWaitAndGo(Entity* player) {
+	switch (aiState) {
+	case IDLE:
+		if (glm::distance(position, player->position) < 3)
+			aiState = WALKING;
+		break;
+	case WALKING:
+		movement.x = ((player->position.x < position.x) ? -1 : 1);
+		break;
+	case ATTACKING:
+		break;
+	}
+}
+
+void Entity::AI(Entity* player) {
+	switch (aiType) {
+	case WALKER:
+		AIWalker();
+		break;
+	case WAITANDGO:
+		AIWaitAndGo(player);
+		break;
+	}
+}
+
+void Entity::Update(float deltaTime, Entity* player, Entity* platforms, int platformCount) {
 
 	if (!isActive) return;
 
@@ -97,6 +126,10 @@ void Entity::Update(float deltaTime, Entity* platforms, int platformCount) {
 	collidedBottom = false;
 	collidedLeft = false;
 	collidedRight = false;
+
+	if (entityType == ENEMY) {
+		AI(player);
+	}
 
 	if (animIndices != NULL) {
 		if (glm::length(movement) != 0) {

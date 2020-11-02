@@ -1,4 +1,9 @@
 ﻿  main.cpp
-  ShaderProgram.cpp
-  Generating Code...
-  SDLProject.vcxproj -> C:\Users\carmine\source\repos\SDLProject\Debug\SDLProject.exe
+E:\CSUY3113\Project4\main.cpp(63,23): warning C4018: '<': signed/unsigned mismatch
+E:\CSUY3113\Project4\main.cpp(279,99): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(281,95): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(283,96): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(285,97): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(288,100): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(290,99): warning C4305: 'argument': truncation from 'double' to 'float'
+  SDLProject.vcxproj -> E:\CSUY3113\Project4\Debug\SDLProject.exe

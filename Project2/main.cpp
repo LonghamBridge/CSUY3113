@@ -5,7 +5,9 @@
 #endif
 
 #define GL_GLEXT_PROTOTYPES 1
+
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <SDL_opengl.h>
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -16,6 +18,8 @@
 
 SDL_Window* displayWindow;
 ShaderProgram program;
+Mix_Music* music;
+Mix_Chunk* bounce;
 glm::mat4 viewMatrix, projectionMatrix;
 bool gameIsRunning = true;
 bool gameStarted = false;
@@ -71,7 +75,7 @@ bool isCollided(glm::vec3 position1, float height1, float width1, glm::vec3 posi
 }
 
 void Initialize() {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     displayWindow = SDL_CreateWindow("HW02: Press Space to Start, D, C, K, M to Play!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
@@ -83,6 +87,12 @@ void Initialize() {
     glViewport(0, 0, 1920, 1080);
     program.Load("shaders/vertex.glsl", "shaders/fragment.glsl");
 
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    music = Mix_LoadMUS("dooblydoo.mp3");
+    bounce = Mix_LoadWAV("bounce.wav");
+    Mix_PlayMusic(music, -1);
+    Mix_VolumeMusic(SDL_MIX_MAXVOLUME / 4);
+
     viewMatrix = glm::mat4(1.0f);
     program.SetViewMatrix(viewMatrix);
     projectionMatrix = glm::ortho(-8.0f, 8.0f, -4.5f, 4.5f, -1.0f, 1.0f);
@@ -93,6 +103,8 @@ void Initialize() {
     glUseProgram(program.programID);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+
 
 }
 
@@ -156,18 +168,27 @@ void Update() {
 
     /*------Collision Check------*/
     //Top & Bottom Wall Check
-    if (ballPosition.y >= 4.3f)
+    if (ballPosition.y >= 4.3f) {
         ballMovement.y = -3.0;
-    else if (ballPosition.y <= -4.3f)
+        Mix_PlayChannel(-1, bounce, 0);
+    }
+    else if (ballPosition.y <= -4.3f) {
         ballMovement.y = 3.0f;
+        Mix_PlayChannel(-1, bounce, 0);
+    }
     //isCollided(glm::vec3 position1, float height1, float width1, glm::vec3 position2, float height2, float width2)
-    else if (isCollided(ballPosition, ballHeight, ballWidth, paddle1Position, paddle1Height, paddle1Width))
+    else if (isCollided(ballPosition, ballHeight, ballWidth, paddle1Position, paddle1Height, paddle1Width)) {
         ballMovement.x = -3.0f;
-    else if (isCollided(ballPosition, ballHeight, ballWidth, paddle2Position, paddle2Height, paddle2Width))
+        Mix_PlayChannel(-1, bounce, 0);
+    }
+    else if (isCollided(ballPosition, ballHeight, ballWidth, paddle2Position, paddle2Height, paddle2Width)) {
         ballMovement.x = 3.0f;
+        Mix_PlayChannel(-1, bounce, 0);
+    }
     else if (ballPosition.x >= 7.8f || ballPosition.x <= -7.8f) {
         someoneWon = true;
         ballMovement = glm::vec3(0);
+        Mix_HaltMusic();
     }
 
     //Ball
@@ -228,6 +249,8 @@ void Render() {
 }
 
 void Shutdown() {
+    Mix_FreeChunk(bounce);
+    Mix_FreeMusic(music);
     SDL_Quit();
 }
 

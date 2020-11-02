@@ -11,8 +11,16 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+enum EntityType { PLAYER, PLATFORM, ENEMY };
+enum AIType { WALKER, WAITANDGO };
+enum AIState { IDLE, WALKING, ATTACKING };
+
 class Entity {
 public:
+	EntityType entityType;
+	AIType aiType;
+	AIState aiState;
+
 	glm::mat4 modelMatrix;
 	glm::vec3 position;
 	glm::vec3 movement;
@@ -31,6 +39,7 @@ public:
 	bool collidedBottom = false;
 	bool collidedLeft = false;
 	bool collidedRight = false;
+	EntityType lastCollision;
 
 	int animFrames = 0;
 	int animIndex = 0;
@@ -49,7 +58,10 @@ public:
 	void CheckCollisionsX(Entity*, int);
 	void CheckCollisionsY(Entity*, int);
 	void DrawSpriteFromTextureAtlas(ShaderProgram*, GLuint, int);
-	void Update(float, Entity*, int);
+	void AIWalker();
+	void AIWaitAndGo(Entity*);
+	void AI(Entity*);
+	void Update(float, Entity*, Entity*, int);
 	void Render(ShaderProgram*);
 };
 

@@ -18,12 +18,14 @@
 #include "Entity.h"
 
 #define FIXED_TIMESTEP 0.007f
-#define PLATFORM_COUNT 5
+#define PLATFORM_COUNT 19
+#define ENEMY_COUNT 1
 
 
 struct GameState {
     Entity* player;
     Entity* platforms;
+    Entity* enemies;
 };
 
 GameState state;
@@ -121,7 +123,8 @@ void Initialize() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     /*------player field------*/
-    state.player = new Entity(glm::vec3(0), glm::vec3(0), 4.0f);
+    state.player = new Entity(glm::vec3(-8, -5, 0), glm::vec3(0), 4.0f);
+    state.player->entityType = PLAYER;
     state.player->acceleration.y = -12.0f;
     state.player->textureID = LoadTexture("george_0.png");
 
@@ -144,26 +147,30 @@ void Initialize() {
 
     /*------platforms field------*/
     state.platforms = new Entity[PLATFORM_COUNT];
-
     GLuint platformTextureID = LoadTexture("platformPack_tile001.png");
-    state.platforms[0].textureID = platformTextureID;
-    state.platforms[0].position = glm::vec3(-1, -3.75, 0);
-
-    state.platforms[1].textureID = platformTextureID;
-    state.platforms[1].position = glm::vec3(0, -3.75, 0);
-
-    state.platforms[2].textureID = platformTextureID;
-    state.platforms[2].position = glm::vec3(1, -3.75, 0);
-
-    state.platforms[3].textureID = platformTextureID;
-    state.platforms[3].position = glm::vec3(-3, -3.75, 0);
-
-    state.platforms[4].textureID = platformTextureID;
-    state.platforms[4].position = glm::vec3(1.5, -2.75, 0);
 
     for (int i = 0; i < PLATFORM_COUNT; i++) {
-        state.platforms[i].Update(0, NULL, 0);
+        state.platforms[i].entityType = PLATFORM;
+        state.platforms[i].textureID = platformTextureID;
+        state.platforms[i].position = glm::vec3(i - 9, -8, 0);
     }
+
+    for (int i = 0; i < PLATFORM_COUNT; i++) {
+        state.platforms[i].Update(0, NULL, NULL, 0);
+    }
+
+    /*------enemies field------*/
+    state.enemies = new Entity[ENEMY_COUNT];
+    state.enemies[0].entityType = ENEMY;
+    GLuint enemyTextureID = LoadTexture("ctg.png");
+
+    state.enemies[0].textureID = enemyTextureID;
+    state.enemies[0].position = glm::vec3(7, -5, 0);
+    state.enemies[0].acceleration.y = -12.0f;
+    state.enemies[0].speed = 2;
+
+    state.enemies[0].aiType = WAITANDGO;
+    state.enemies[0].aiState = IDLE;
 
 }
 
@@ -221,7 +228,9 @@ void Update() {
     }
 
     while (deltaTime >= FIXED_TIMESTEP) {
-        state.player->Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
+        state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);
+        for (int i = 0; i < ENEMY_COUNT; i++)
+            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);
         deltaTime -= FIXED_TIMESTEP;
     }
 
@@ -232,10 +241,14 @@ void Update() {
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    DrawText(&program, LoadTexture("font1.png"), "sssss", 0.5f, -0.25f, glm::vec3(0));
+    //DrawText(&program, LoadTexture("font1.png"), "sssss", 0.5f, -0.25f, glm::vec3(0));
 
     for (int i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Render(&program);
+    }
+
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+        state.enemies[i].Render(&program);
     }
 
     state.player->Render(&program);
