@@ -36,6 +36,7 @@ bool gameIsRunning = true;
 float lastTicks = 0;
 float accumulator = 0.0f;
 int stage = 0;
+GLuint fontID;
 
 
 GLuint LoadTexture(const char* filePath) {
@@ -122,6 +123,8 @@ void Initialize() {
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    fontID = LoadTexture("font1.png");
 
     /*------player field------*/
     state.player = new Entity(glm::vec3(-8, -5, 0), glm::vec3(0), 4.0f);
@@ -276,18 +279,18 @@ void Update() {
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
-    DrawText(&program, LoadTexture("font1.png"), "Jump Power:", 0.5f, -0.2, glm::vec3(-14, 8.3, 0));
+    DrawText(&program, fontID, "Jump Power:", 0.5f, -0.2, glm::vec3(-14, 8.3, 0));
     if (state.player->jumpPower == 6.0f)
-        DrawText(&program, LoadTexture("font1.png"), "+", 0.5f, -0.2, glm::vec3(-10.5, 8.3, 0));
+        DrawText(&program, fontID, "+", 0.5f, -0.2, glm::vec3(-10.5, 8.3, 0));
     else if (state.player->jumpPower == 9.0f)
-        DrawText(&program, LoadTexture("font1.png"), "++", 0.5f, -0.2, glm::vec3(-10.5, 8.3, 0));
+        DrawText(&program, fontID, "++", 0.5f, -0.2, glm::vec3(-10.5, 8.3, 0));
     else
-        DrawText(&program, LoadTexture("font1.png"), "+++", 0.5f, -0.2, glm::vec3(-10.5, 8.3, 0));
+        DrawText(&program, fontID, "+++", 0.5f, -0.2, glm::vec3(-10.5, 8.3, 0));
 
     if (state.player->isActive == false)
-        DrawText(&program, LoadTexture("font1.png"), "You Lose", 1.25f, -0.2, glm::vec3(-3.5, 0, 0));
+        DrawText(&program, fontID, "You Lose", 1.25f, -0.2, glm::vec3(-3.5, 0, 0));
     if (state.enemies[0].isActive == false && state.enemies[1].isActive == false && state.enemies[2].isActive == false)
-        DrawText(&program, LoadTexture("font1.png"), "You Win", 1.25f, -0.2, glm::vec3(-3.5, 0, 0));
+        DrawText(&program, fontID, "You Win", 1.25f, -0.2, glm::vec3(-3.5, 0, 0));
 
     for (int i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Render(&program);

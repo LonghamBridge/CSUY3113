@@ -1,9 +1,9 @@
 ﻿  main.cpp
-E:\CSUY3113\Project4\main.cpp(63,23): warning C4018: '<': signed/unsigned mismatch
-E:\CSUY3113\Project4\main.cpp(279,99): warning C4305: 'argument': truncation from 'double' to 'float'
-E:\CSUY3113\Project4\main.cpp(281,95): warning C4305: 'argument': truncation from 'double' to 'float'
-E:\CSUY3113\Project4\main.cpp(283,96): warning C4305: 'argument': truncation from 'double' to 'float'
-E:\CSUY3113\Project4\main.cpp(285,97): warning C4305: 'argument': truncation from 'double' to 'float'
-E:\CSUY3113\Project4\main.cpp(288,100): warning C4305: 'argument': truncation from 'double' to 'float'
-E:\CSUY3113\Project4\main.cpp(290,99): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(64,23): warning C4018: '<': signed/unsigned mismatch
+E:\CSUY3113\Project4\main.cpp(282,81): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(284,77): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(286,78): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(288,79): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(291,82): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CSUY3113\Project4\main.cpp(293,81): warning C4305: 'argument': truncation from 'double' to 'float'
   SDLProject.vcxproj -> E:\CSUY3113\Project4\Debug\SDLProject.exe
