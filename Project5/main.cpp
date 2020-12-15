@@ -14,6 +14,7 @@
 #include "ShaderProgram.h"
 
 #include "Util.h"
+#include "Effects.h"
 #include "Entity.h"
 #include "Map.h"
 #include "Scene.h"
@@ -39,6 +40,8 @@ Mix_Chunk* jump;
 Scene* currentScene;
 Scene* sceneList[4];
 
+Effects* effects;
+Effects* effects2;
 
 void SwitchToScene(Scene* scene, int lives) {
     currentScene = scene;
@@ -58,7 +61,7 @@ void Initialize() {
     glViewport(0, 0, 1920, 1080);
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
 
-    Mix_OpenAudio(88888, MIX_DEFAULT_FORMAT, 2, 4096);      //HEY! My music was not working so I made something fun here...
+    Mix_OpenAudio(88888, MIX_DEFAULT_FORMAT, 2, 4096);      
     music1 = Mix_LoadMUS("dooblydoo.mp3");
     jump = Mix_LoadWAV("jump.wav");
     Mix_PlayMusic(music1, -1);
@@ -87,6 +90,11 @@ void Initialize() {
     sceneList[3] = new Menu();
     sceneList[3]->isMenu = true;
     SwitchToScene(sceneList[3], 3);
+
+    //effects = new Effects(projectionMatrix, viewMatrix, HEALTH);
+    //effects2 = new Effects(projectionMatrix, viewMatrix, SHAKE);
+    //effects->Start(HEALTH);
+    //effects2->Start(FADEIN);
 }
 
 
@@ -107,6 +115,8 @@ void ProcessInput() {
                 if (currentScene->state.player->collidedBottom) {
                     currentScene->state.player->jump = true;
                     Mix_PlayChannel(-1, jump, 0);
+                    //effects->Start(SHAKE);
+                    //effects2->Start(BLOOD);
                 }
                 break;
             case SDLK_RETURN:
@@ -152,6 +162,8 @@ void Update() {
 
     while (deltaTime >= FIXED_TIMESTEP) {
         currentScene->Update(FIXED_TIMESTEP);
+        effects->Update(FIXED_TIMESTEP);
+        effects2->Update(FIXED_TIMESTEP);
         deltaTime -= FIXED_TIMESTEP;
     }
 
@@ -168,6 +180,7 @@ void Update() {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-10, 4, 0));
     }
     
+    viewMatrix = glm::translate(viewMatrix, effects->viewOffset);
 }
 
 
@@ -189,8 +202,14 @@ void Render() {
         Util::DrawText(&program, fontID, "Press Enter to start", 0.5, 0, glm::vec3(3.25, -4.5, 0));
         Util::DrawText(&program, fontIDRed, "Do not try to kill monsters, or you will die!", 0.5, -0.2, glm::vec3(2.5, -5.5, 0));
     }
+
     program.SetViewMatrix(viewMatrix);
+
+    glUseProgram(program.programID);
     currentScene->Render(&program);
+    
+    effects->Render();
+    effects2->Render();
     SDL_GL_SwapWindow(displayWindow);
 }
 

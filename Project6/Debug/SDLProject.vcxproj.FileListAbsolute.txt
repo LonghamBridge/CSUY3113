@@ -1,0 +1,14 @@
+E:\CSUY3113\Notes\Debug\SDLProject.exe
+E:\CSUY3113\Notes\Debug\SDLProject.pdb
+E:\CSUY3113\Notes2\Debug\SDLProject.exe
+E:\CSUY3113\Notes2\Debug\SDLProject.pdb
+E:\CSUY3113\Project4\Debug\SDLProject.exe
+E:\CSUY3113\Project4\Debug\SDLProject.pdb
+E:\CSUY3113\Project5\Debug\SDLProject.exe
+E:\CSUY3113\Project5\Debug\SDLProject.pdb
+C:\Users\lawre\Downloads\Project5\Project5\Debug\SDLProject.exe
+C:\Users\lawre\Downloads\Project5\Project5\Debug\SDLProject.pdb
+E:\sssss\Project5\Project5\Debug\SDLProject.exe
+E:\sssss\Project5\Project5\Debug\SDLProject.pdb
+E:\CSUY3113\Project6\Debug\SDLProject.exe
+E:\CSUY3113\Project6\Debug\SDLProject.pdb

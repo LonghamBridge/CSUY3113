@@ -2,6 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <SDL_image.h>
 #include "stb_image.h"
+
 GLuint Util::LoadTexture(const char* filePath) {
 	int w, h, n;
 	unsigned char* image = stbi_load(filePath, &w, &h, &n, STBI_rgb_alpha);
